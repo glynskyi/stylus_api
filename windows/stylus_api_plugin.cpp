@@ -162,8 +162,33 @@ public:
 		g_Channel->InvokeMethod("StylusDown", std::make_unique<flutter::EncodableValue>(flutter::EncodableValue(args_stream.str())));
 		return S_OK;
 	}
-	STDMETHOD(StylusUp)(IRealTimeStylus*, const StylusInfo*, ULONG, LONG* _pPackets, LONG**) {
-		g_Channel->InvokeMethod("StylusUp", nullptr);
+	STDMETHOD(StylusUp)(IRealTimeStylus*, const StylusInfo* pStylusInfo, ULONG nPackets, LONG* _pPackets, LONG**) {
+		uint32 iCtx = c_nMaxContexts;
+		for (uint32 i = 0; i < g_nContexts; i++)
+		{
+			if (g_lContexts[i].iTabletContext == pStylusInfo->tcid)
+			{
+				iCtx = i;
+				break;
+			}
+		}
+
+		// If we are not getting pressure values, just ignore it
+		// if (iCtx >= c_nMaxContexts)
+		//	return S_OK;
+
+		// g_Pressure = pLastPacket[g_lContexts[iCtx].iPressure] * g_lContexts[iCtx].PressureRcp;
+		// g_bInverted = (pStylusInfo->bIsInvertedCursor != 0);
+
+		ULONG x = _pPackets[g_lXContexts[0].iX];
+		ULONG y = _pPackets[g_lXContexts[0].iY];
+		ULONG width = _pPackets[g_lXContexts[0].iWidth];
+		ULONG height = _pPackets[g_lXContexts[0].iHeight];
+
+		std::ostringstream args_stream;
+		args_stream << x * ScaleX << "," << y * ScaleY;
+
+		g_Channel->InvokeMethod("StylusUp", std::make_unique<flutter::EncodableValue>(flutter::EncodableValue(args_stream.str())));
 		return S_OK;
 	}
 	STDMETHOD(RealTimeStylusEnabled)(IRealTimeStylus*, ULONG, const TABLET_CONTEXT_ID*) {

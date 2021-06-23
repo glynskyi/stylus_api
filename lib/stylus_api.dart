@@ -32,9 +32,14 @@ class StylusApi {
           WidgetsBinding.instance?.handlePointerEvent(event);
         }
         if (call.method == "StylusUp") {
+          final args = (call.arguments as String).split(",");
+          final x = double.parse(args[0]);
+          final y = double.parse(args[1]);
+
+          final mediaQuery = MediaQuery.of(context);
           final event = PointerUpEvent(
             kind: PointerDeviceKind.stylus,
-            position: Offset(0, 0),
+            position: Offset(x / mediaQuery.devicePixelRatio, y / mediaQuery.devicePixelRatio),
           );
           WidgetsBinding.instance?.handlePointerEvent(event);
         }
