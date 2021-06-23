@@ -27,6 +27,7 @@ class StylusApi {
           final mediaQuery = MediaQuery.of(context);
           final event = PointerDownEvent(
             kind: PointerDeviceKind.stylus,
+            buttons: 0,
             position: Offset(x / mediaQuery.devicePixelRatio, y / mediaQuery.devicePixelRatio),
           );
           WidgetsBinding.instance?.handlePointerEvent(event);
@@ -39,6 +40,7 @@ class StylusApi {
           final mediaQuery = MediaQuery.of(context);
           final event = PointerUpEvent(
             kind: PointerDeviceKind.stylus,
+            buttons: 0,
             position: Offset(x / mediaQuery.devicePixelRatio, y / mediaQuery.devicePixelRatio),
           );
           WidgetsBinding.instance?.handlePointerEvent(event);
@@ -55,6 +57,7 @@ class StylusApi {
           final mediaQuery = MediaQuery.of(context);
           final event = PointerMoveEvent(
             kind: PointerDeviceKind.stylus,
+            buttons: 0,
             position: Offset(x / mediaQuery.devicePixelRatio, y / mediaQuery.devicePixelRatio),
           );
           WidgetsBinding.instance?.handlePointerEvent(event);
